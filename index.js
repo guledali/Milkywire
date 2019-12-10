@@ -2,7 +2,7 @@ const express = require('express');
 const PORT = process.env.PORT || 3001;
 const app = express();
 
-var bodyParser = require('body-parser')
+const bodyParser = require('body-parser')
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({
 }))
 
 
-var knex = require('knex')({
+const knex = require('knex')({
   client: "postgresql",
   connection: {
     database: 'impacter-posts-dev',
