@@ -42,9 +42,16 @@ app.get('/posts/:id', (req, res) => {
 app.put('/posts/:id', (req, res) => {
   knex("co_posts")
     .where({ "post_id": req.params.id }).update({ "description": req.body.description }).then((data) => {
-      res.json(data)
+      res.json("updated")
     })
   });
+
+app.delete('/posts/:id', (req, res) => {
+  knex("co_posts")
+    .where({ "post_id": req.params.id }).del().then(() => {
+      res.json("deleted")
+    })
+});
 
 
 // app.put('/posts/:id', (req, res) => {
