@@ -2,6 +2,14 @@ const express = require('express');
 const PORT = process.env.PORT || 3001;
 const app = express();
 
+var bodyParser = require('body-parser')
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}))
+
+
 var knex = require('knex')({
   client: "postgresql",
   connection: {
@@ -26,6 +34,26 @@ app.get('/posts/:id', (req, res) => {
     res.send(data)
   });
 });
+
+// knex('users')
+//   .where({ id: 135 })
+//   .update({ email: 'hi@example.com' })
+
+app.put('/posts/:id', (req, res) => {
+  knex("co_posts")
+    .where({ "post_id": req.params.id }).update({ "description": req.body.description }).then((data) => {
+      res.json(data)
+    })
+  });
+
+
+// app.put('/posts/:id', (req, res) => {
+//   knex.where({ post_id: req.params.id }).from("co_posts").update({
+//     description: req.body.description
+//   }).then(function(data) {
+//     res.send(data)
+//   });
+// });
 
 // knex('users')
 //   .where({ email: 'hi@example.com' })
