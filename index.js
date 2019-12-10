@@ -51,7 +51,7 @@ app.put('/posts/:id', (req, res) => {
       "published_at": req.body.published_at,
       "created_at": req.body.created_at,
       "updated_at": req.body.updated_at
-  }).then((data) => {
+  }).then(() => {
       res.json("updated")
     })
   });
