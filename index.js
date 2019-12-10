@@ -39,12 +39,30 @@ app.get('/posts/:id', (req, res) => {
 //   .where({ id: 135 })
 //   .update({ email: 'hi@example.com' })
 
+
+
+
 app.put('/posts/:id', (req, res) => {
   knex("co_posts")
-    .where({ "post_id": req.params.id }).update({ "description": req.body.description }).then((data) => {
+    .where({ "post_id": req.params.id }).update({
+      "post_id": req.body.post_id,
+      "description": req.body.description,
+      "type": req.body.type,
+      "status": req.body.status,
+      "data": {
+          "media": req.body.data.media
+      },
+      "reaction_count": req.body.reaction_count,
+      "impacter_id": req.body.impacter_id,
+      "published_at": req.body.published_at,
+      "created_at": req.body.created_at,
+      "updated_at": req.body.updated_at
+  }).then((data) => {
+      console.log(req.body)
       res.json("updated")
     })
   });
+
 
 app.delete('/posts/:id', (req, res) => {
   knex("co_posts")
