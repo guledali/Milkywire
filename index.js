@@ -2,7 +2,7 @@ const express = require('express');
 const PORT = process.env.PORT || 3001;
 const app = express();
 
-var bodyParser = require('body-parser')
+const bodyParser = require('body-parser')
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({
 }))
 
 
-var knex = require('knex')({
+const knex = require('knex')({
   client: "postgresql",
   connection: {
     database: 'impacter-posts-dev',
@@ -21,50 +21,48 @@ var knex = require('knex')({
   }
 });
 
-// get all posts
+// Get all posts
 app.get('/posts', (req, res) => {
-  knex.select().from("co_posts").then(function(data) {
-    res.send(data)
+  knex.select().from("co_posts").then((data) => {
+    res.json(data)
   });
 });
 
-// Get all posts for a specific impacter /posts/:id  by using post_id
+// Get all posts for a specific impacter
 app.get('/posts/:id', (req, res) => {
-  knex.where({ post_id: req.params.id }).from("co_posts").then(function(data) {
-    res.send(data)
+  knex.where({ post_id: req.params.id }).from("co_posts").then((data) => {
+    res.json(data)
   });
 });
 
-// knex('users')
-//   .where({ id: 135 })
-//   .update({ email: 'hi@example.com' })
-
+// Update a post
 app.put('/posts/:id', (req, res) => {
   knex("co_posts")
-    .where({ "post_id": req.params.id }).update({ "description": req.body.description }).then((data) => {
+    .where({ "post_id": req.params.id }).update({
+      "post_id": req.body.post_id,
+      "description": req.body.description,
+      "type": req.body.type,
+      "status": req.body.status,
+      "data": {
+          "media": req.body.data.media
+      },
+      "reaction_count": req.body.reaction_count,
+      "impacter_id": req.body.impacter_id,
+      "published_at": req.body.published_at,
+      "created_at": req.body.created_at,
+      "updated_at": req.body.updated_at
+  }).then(() => {
       res.json("updated")
     })
   });
 
+// Delete a post
 app.delete('/posts/:id', (req, res) => {
   knex("co_posts")
     .where({ "post_id": req.params.id }).del().then(() => {
       res.json("deleted")
     })
 });
-
-
-// app.put('/posts/:id', (req, res) => {
-//   knex.where({ post_id: req.params.id }).from("co_posts").update({
-//     description: req.body.description
-//   }).then(function(data) {
-//     res.send(data)
-//   });
-// });
-
-// knex('users')
-//   .where({ email: 'hi@example.com' })
-//   .then(rows => ···)
 
 app.listen(PORT, () => {
   console.log(`Listening on port: ${PORT}`);
